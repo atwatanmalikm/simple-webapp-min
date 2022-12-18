@@ -3,9 +3,9 @@ pipeline {
 
   environment {
     // Adjust variables below
-    ARGOCD_SERVER     = "10.13.3.10:30443"
-    APP_MANIFEST_REPO = "https://github.com/atwatanmalikm/simple-webapp-manifest.git"
-    IMAGE_NAME        = "docker.io/atwatanmalikm/webapp"
+    ARGOCD_SERVER     = "10.13.X.10:30443"
+    APP_MANIFEST_REPO = "https://github.com/your_git_username/simple-webapp-manifest.git"
+    IMAGE_NAME        = "docker.io/your_dockerhub_username/webapp"
     
 
     // Do not edit variables below
@@ -65,21 +65,19 @@ pipeline {
 
     stage('Update Manifest') {
       steps {
-        container('webapp-agent') {
-          script {
-            withCredentials([usernamePassword(credentialsId: 'github-cred',
-                 usernameVariable: 'username',
-                 passwordVariable: 'password')]){
-                  sh("""
-                  git clone $APP_MANIFEST_REPO
-                  cd simple-webapp-manifest
-                  sed -i "s/webapp:.*/webapp:$TAG/g" deployment.yaml
-                  git config --global user.email "example@main.com"
-                  git config --global user.name "example"
-                  git add . && git commit -m 'update image tag'
-                  git push https://$username:$password@github.com$APP_MANIFEST_PATH main
-                  """)
-            }
+        script {
+          withCredentials([usernamePassword(credentialsId: 'github-cred',
+               usernameVariable: 'username',
+               passwordVariable: 'password')]){
+                sh("""
+                git clone $APP_MANIFEST_REPO
+                cd simple-webapp-manifest
+                sed -i "s/webapp:.*/webapp:$TAG/g" deployment.yaml
+                git config --global user.email "example@main.com"
+                git config --global user.name "example"
+                git add . && git commit -m 'update image tag'
+                git push https://$username:$password@github.com$APP_MANIFEST_PATH main
+                """)
           }
         }
       }
@@ -87,15 +85,13 @@ pipeline {
 
     stage("Sync App ArgoCD"){
       steps{
-        container('argocd'){
-          script {
-            withCredentials([string(credentialsId: 'argocd-cred', variable: 'ARGOCD_AUTH_TOKEN')]){
-                  sh("""
-                  export ARGOCD_SERVER='$ARGOCD_SERVER'
-                  export ARGOCD_OPTS='$ARGOCD_OPTS'
-                  argocd app sync simple-webapp
-                  """)
-            }
+        script {
+          withCredentials([string(credentialsId: 'argocd-cred', variable: 'ARGOCD_AUTH_TOKEN')]){
+                sh("""
+                export ARGOCD_SERVER='$ARGOCD_SERVER'
+                export ARGOCD_OPTS='$ARGOCD_OPTS'
+                argocd app sync simple-webapp
+                """)
           }
         }
       }
