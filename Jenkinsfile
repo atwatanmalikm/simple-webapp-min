@@ -3,7 +3,7 @@ pipeline {
   
   environment {
     // Adjust variables below
-    IMAGE_NAME = "docker.io/atwatanmalikm/webapp"
+    IMAGE_NAME = "docker.io/your_dockerhub_username/webapp"
     TAG = sh (script: "date +%y%m%d%H%M", returnStdout: true).trim()
   }
   
@@ -30,10 +30,10 @@ pipeline {
     
     stage("Build & Push Image"){
       steps{
-        script {
-          dockerImage = docker.build("$IMAGE_NAME:$TAG")
-          dockerImage.push()
-        }
+        sh """
+        docker build -t ${IMAGE_NAME}:${TAG}
+        docker push ${IMAGE_NAME}:${TAG}
+        """
       }
       post {
         success {
