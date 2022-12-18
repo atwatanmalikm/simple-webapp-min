@@ -3,9 +3,9 @@ pipeline {
 
   environment {
     // Adjust variables below
-    ARGOCD_SERVER     = "10.13.X.10:30443"
-    APP_MANIFEST_REPO = "https://github.com/your_git_username/simple-webapp-manifest.git"
-    IMAGE_NAME        = "docker.io/your_dockerhub_username/webapp"
+    ARGOCD_SERVER     = "10.13.3.10:30443"
+    APP_MANIFEST_REPO = "https://github.com/atwatanmalikm/simple-webapp-manifest.git"
+    IMAGE_NAME        = "docker.io/atwatanmalikm/webapp"
     
 
     // Do not edit variables below
