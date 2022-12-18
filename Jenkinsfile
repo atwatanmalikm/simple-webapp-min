@@ -3,7 +3,7 @@ pipeline {
   
   environment {
     // Adjust variables below
-    IMAGE_NAME  = "docker.io/your_dockerhub_username/webapp"
+    IMAGE_NAME  = "docker.io/atwatanmalikm/webapp"
     TAG         = sh (script: "date +%y%m%d%H%M", returnStdout: true).trim()
 
     // Do not edit variables below
