@@ -30,10 +30,10 @@ pipeline {
     
     stage("Build & Push Image"){
       steps{
-        sh """
-        docker build -t $IMAGE_NAME:$TAG .
-        docker push
-        """
+        script {
+          dockerImage = docker.build("$IMAGE_NAME:$TAG")
+          dockerImage.push()
+        }
       }
       post {
         success {
