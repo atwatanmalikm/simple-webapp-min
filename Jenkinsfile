@@ -70,6 +70,7 @@ pipeline {
                usernameVariable: 'username',
                passwordVariable: 'password')]){
                 sh("""
+                rm -rf simple-webapp-manifest
                 git clone $APP_MANIFEST_REPO
                 cd simple-webapp-manifest
                 sed -i "s/webapp:.*/webapp:$TAG/g" deployment.yaml
