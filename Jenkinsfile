@@ -73,7 +73,7 @@ pipeline {
                 rm -rf simple-webapp-manifest
                 git clone $APP_MANIFEST_REPO
                 cd simple-webapp-manifest
-                sed -i "s/webapp:.*/webapp:$TAG/g" deployment.yaml
+                sed -iE "s/image:.*/image:.*/image: $IMAGE_NAME:$TAG/g" deployment.yaml
                 git config --global user.email "example@main.com"
                 git config --global user.name "example"
                 git add . && git commit -m 'update image tag'
